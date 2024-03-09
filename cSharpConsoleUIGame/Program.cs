@@ -26,6 +26,7 @@ int indiceComidaActual = 0;
 
 IniciarJuego();
 
+// Bucle principal del juego. Se ejecutará continuamente mientras `deberiaSalir == false`
 while (!deberiaSalir)
 {
     if (TerminalCambiada())
@@ -36,18 +37,86 @@ while (!deberiaSalir)
     }
     else
     {
-        // Console.WriteLine("Me moví");
-        Moverse();
-        // if (jugadorHaConsumidoComida())
-        // {
-        //     CambiarAparienciaJugador();
-        //     MostrarComida();
-        // }
+        if(JugadorEsRapido())
+        {
+            Moverse(1, false);
+        }
+        else if (JugadorEstaCongelado())
+        {
+            CongelarJugador();
+        }
+        else
+        {
+            Moverse(salirConOtraTecla: false);
+        }
+
+
+        if (jugadorHaConsumidoComida())
+        {
+            CambiarAparienciaJugador();
+            MostrarComida();
+        }
     }
 }
 
+
+// Devuelve true si la terminal cambia de tamaño. 
+bool TerminalCambiada() 
+{
+    return altura != (Console.WindowHeight - 1) || ancho != (Console.WindowWidth - 5);
+}
+
+// Mostrar una comida aleatoria en una posición aleatoria
+void MostrarComida()
+{
+     // Actualizar la comida a un índice aleatoria.
+    indiceComidaActual = random.Next(0, comidas.Length);
+
+    // Actualizar la posición de la comida a una localizazión aleatoria.
+    comidaX = random.Next(0, ancho - aparienciaJugador.Length);
+    comidaY = random.Next(0, altura - 1);
+
+    // Mostrar la comida en la ubicación.
+    Console.SetCursorPosition(comidaX, comidaY);
+    Console.Write(comidas[indiceComidaActual]);
+}
+
+
+// Devuelve `true` si la ubicación del jugador coincide con la de la comida
+bool jugadorHaConsumidoComida() 
+{
+    return jugadorPosicionY == comidaY && jugadorPosicionX == comidaX;
+}
+
+// Devuelve `true` si la apariencia del jugador representa un estado de congelado
+bool JugadorEstaCongelado() 
+{
+    return aparienciaJugador.Equals(estados[2]);
+}
+
+// Devuelve `true` si la apariencia del jugador representa un estado de rapidez
+bool JugadorEsRapido() 
+{
+    return aparienciaJugador.Equals(estados[1]);
+}
+
+// Cambiar la apariencia del jugador para que coincida con el alimento consumido
+void CambiarAparienciaJugador() 
+{
+    aparienciaJugador = estados[indiceComidaActual];
+    Console.SetCursorPosition(jugadorPosicionX, jugadorPosicionX);
+    Console.Write(aparienciaJugador);
+}
+
+// Detiene temporalmente los movimientos del jugador
+void CongelarJugador() 
+{
+    System.Threading.Thread.Sleep(1000);
+    aparienciaJugador = estados[0];
+}
+
 // Leer entradas direccionales desde la consola y mover al jugador.
-void Moverse(bool salirConOtraTecla = false)
+void Moverse(int velocidad = 1, bool salirConOtraTecla = false)
 {
     int ultimaPosicionJugadorX = jugadorPosicionX;
     int ultimaPosicionJugadorY = jugadorPosicionY;
@@ -61,10 +130,10 @@ void Moverse(bool salirConOtraTecla = false)
             jugadorPosicionY++;
             break;
         case ConsoleKey.LeftArrow:
-            jugadorPosicionX--;
+            jugadorPosicionX -= velocidad;
             break;
         case ConsoleKey.RightArrow:
-            jugadorPosicionX++;
+            jugadorPosicionX += velocidad;
             break;
         case ConsoleKey.Escape:
             deberiaSalir = true;
@@ -89,27 +158,6 @@ void Moverse(bool salirConOtraTecla = false)
     // Dibujar el jugador en la nueva posición
     Console.SetCursorPosition(jugadorPosicionX,  jugadorPosicionY);
     Console.Write(aparienciaJugador);
-}
-
-// Mostrar una comida aleatoria en una posición aleatoria
-void MostrarComida()
-{
-     // Actualizar la comida a un índice aleatoria.
-    indiceComidaActual = random.Next(0, comidas.Length);
-
-    // Actualizar la posición de la comida a una localizazión aleatoria.
-    comidaX = random.Next(0, ancho - aparienciaJugador.Length);
-    comidaY = random.Next(0, altura - 1);
-
-    // Mostrar la comida en la localización.
-    Console.SetCursorPosition(comidaX, comidaY);
-    Console.Write(comidas[indiceComidaActual]);
-}
-
-// Devuelve true si la terminal cambia de tamaño. 
-bool TerminalCambiada() 
-{
-    return altura != Console.WindowHeight - 1 || ancho != Console.WindowWidth - 5;
 }
 
 // Limpiamos la consola, mostrar la comida y el jugador
