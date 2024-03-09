@@ -1,6 +1,6 @@
 ﻿using System;
 
-Random random = new();
+Random random = new Random();
 Console.CursorVisible = false;
 int altura = Console.WindowHeight - 1;
 int ancho = Console.WindowWidth - 5;
@@ -15,8 +15,8 @@ int comidaX = 0;
 int comidaY = 0;
 
 // Strings disponibles para el jugador y la comida:
-string[] estados = ["('-')", "(^-^)", "(X_X)"];
-string[] comidas = ["@@@@@", "$$$$$", "#####"];
+string[] estados = {"('-')", "(^-^)", "(X_X)"};
+string[] comidas = {"@@@@@", "$$$$$", "#####"};
 
 // String actual del juagador mostrada en la consola
 string aparienciaJugador = estados[0];
@@ -49,7 +49,6 @@ while (!deberiaSalir)
         {
             Moverse(salirConOtraTecla: false);
         }
-
 
         if (jugadorHaConsumidoComida())
         {

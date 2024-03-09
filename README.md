@@ -28,7 +28,6 @@
 
 ## Requerimientos
 
-- Tener instalado **Visual Studio Code**.
 - Tener intalado el sdk **dotNET 8** (<https://dotnet.microsoft.com/en-us/download>).
 - Tener instalado **Git**.
 
@@ -40,14 +39,19 @@
 git clone https://github.com/MARnVEL/cSharpConsoleUIGame.git
 ```
 
-### Con una terminal localizarse en el directorio del proyecto y ejecutar
+### Con una terminal localizarse en el directorio del proyecto que contiene el fichero `Program.cs`
+
+> De acuerdo a tu sistema podría variar, pero el directorio se parece a lo siguiente:
+> `C:<direcotrio_donde_se_clono_el_proyecto>\cSharpConsoleUIGame\cSharpConsoleUIGame\`
+
+### Ejecutar
 
 ```bash
 dotnet build
 ```
 
-### Para ejecutar el proyecto
+#### Se crearán un par de directorios con los binarios necesarios para la correcta ejecución del sofware
 
-```bash
-dotnet run
-```
+### Para correr el proyecto debes dirigirte al directorio `C:<direcotrio_donde_se_clono_el_proyecto>\cSharpConsoleUIGame\cSharpConsoleUIGame\bin\Debug\net8.0\`
+
+### Abrir/Ejecutar el fichero `cSharpConsoleUIGame.exe`
