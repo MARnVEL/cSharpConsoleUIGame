@@ -3,12 +3,12 @@
 Random random = new();
 Console.CursorVisible = false;
 int altura = Console.WindowHeight - 1;
-int ancho = Console.WindowWidth - 1;
+int ancho = Console.WindowWidth - 5;
 bool deberiaSalir = false;
 
 // Posición en la consola del jugador:
-int jugadorX = 0;
-int jugadorY = 0;
+int jugadorPosicionX = 0;
+int jugadorPosicionY = 0;
 
 // Posición en la consola de la comida:
 int comidaX = 0;
@@ -36,8 +36,59 @@ while (!deberiaSalir)
     }
     else
     {
+        // Console.WriteLine("Me moví");
         Moverse();
+        // if (jugadorHaConsumidoComida())
+        // {
+        //     CambiarAparienciaJugador();
+        //     MostrarComida();
+        // }
     }
+}
+
+// Leer entradas direccionales desde la consola y mover al jugador.
+void Moverse(bool salirConOtraTecla = false)
+{
+    int ultimaPosicionJugadorX = jugadorPosicionX;
+    int ultimaPosicionJugadorY = jugadorPosicionY;
+
+    switch(Console.ReadKey(true).Key)
+    {
+        case ConsoleKey.UpArrow:
+            jugadorPosicionY--;
+            break;
+        case ConsoleKey.DownArrow:
+            jugadorPosicionY++;
+            break;
+        case ConsoleKey.LeftArrow:
+            jugadorPosicionX--;
+            break;
+        case ConsoleKey.RightArrow:
+            jugadorPosicionX++;
+            break;
+        case ConsoleKey.Escape:
+            deberiaSalir = true;
+            break;
+        default:
+            // Salir si se presiona cualquier otra tecla que no sea alguna de las anteriores.
+            deberiaSalir = salirConOtraTecla;
+            break;
+    }
+
+    // Limpiar caracteres en las posiciones previas
+    Console.SetCursorPosition(ultimaPosicionJugadorX, ultimaPosicionJugadorY);
+    for(int i = 0; i < aparienciaJugador.Length; i++)
+    {
+        Console.Write(" ");
+    }
+
+    // Matener las posiciones del jugador dentro de las fronteras de la ventana de la consola
+    jugadorPosicionX = (jugadorPosicionX < 0) ? 0 : (jugadorPosicionX >= ancho ? ancho : jugadorPosicionX);
+    jugadorPosicionY = (jugadorPosicionY < 0) ? 0 : (jugadorPosicionY >= altura ? altura : jugadorPosicionY);
+
+    // Dibujar el jugador en la nueva posición
+    Console.SetCursorPosition(jugadorPosicionX,  jugadorPosicionY);
+    Console.Write(aparienciaJugador);
 }
 
 // Mostrar una comida aleatoria en una posición aleatoria
@@ -46,11 +97,11 @@ void MostrarComida()
      // Actualizar la comida a un índice aleatoria.
     indiceComidaActual = random.Next(0, comidas.Length);
 
-    // Update food position to a random location
+    // Actualizar la posición de la comida a una localizazión aleatoria.
     comidaX = random.Next(0, ancho - aparienciaJugador.Length);
     comidaY = random.Next(0, altura - 1);
 
-    // Display the food at the location
+    // Mostrar la comida en la localización.
     Console.SetCursorPosition(comidaX, comidaY);
     Console.Write(comidas[indiceComidaActual]);
 }
